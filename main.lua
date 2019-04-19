@@ -34,6 +34,11 @@ function love.update(dt)
         zombie.y = zombie.y + math.sin(zombiePlayerAngle(zombie)) * zombie.speed
     end
 
+    for i, bullet in ipairs(bullets) do
+        bullet.x = bullet.x + math.cos(bullet.direction) * bullet.speed
+        bullet.y = bullet.y + math.sin(bullet.direction) * bullet.speed
+    end
+
     timer = timer - dt
     if timer <= 0 then
         spawnZombie()
@@ -50,8 +55,15 @@ function love.draw()
         love.graphics.draw(sprites.zombie, zombie.x, zombie.y, zombiePlayerAngle(zombie), nil, nil, sprites.zombie:getWidth() / 2, sprites.zombie:getHeight() / 2)
     end
 
-    for i, b in ipairs(bullets) do
+    for i, bullet in ipairs(bullets) do
+        love.graphics.draw(sprites.bullet, bullet.x, bullet.y, nil, 0.5, 0.5, sprites.bullet:getWidth() / 2, sprites.bullet:getHeight() / 2)
+    end
+end
 
+
+function love.mousepressed(x, y, source, isTouch)
+    if source == 1 then
+        spawnBullet()
     end
 end
 
@@ -97,5 +109,6 @@ function spawnBullet()
     bullet.x = player.x
     bullet.y = player.y
     bullet.speed = 8
+    bullet.direction = mouseAngle()
     table.insert( bullets, bullet)
 end
